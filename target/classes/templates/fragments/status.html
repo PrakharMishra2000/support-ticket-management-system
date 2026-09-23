@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="badge(status)">
+  <span th:if="${status.name() == 'OPEN'}"
+        class="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 ring-1 ring-inset ring-blue-200">
+    <span class="h-1.5 w-1.5 rounded-full bg-blue-500"></span>OPEN
+  </span>
+  <span th:if="${status.name() == 'IN_PROGRESS'}"
+        class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-inset ring-amber-200">
+    <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>IN PROGRESS
+  </span>
+  <span th:if="${status.name() == 'RESOLVED'}"
+        class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-inset ring-emerald-200">
+    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>RESOLVED
+  </span>
+  <span th:if="${status.name() == 'CLOSED'}"
+        class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-700 ring-1 ring-inset ring-slate-300">
+    <span class="h-1.5 w-1.5 rounded-full bg-slate-500"></span>CLOSED
+  </span>
+  <span th:if="${status.name() == 'CANCELLED'}"
+        class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-semibold text-red-700 ring-1 ring-inset ring-red-200">
+    <span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>CANCELLED
+  </span>
+</th:block>
+</body>
+</html>

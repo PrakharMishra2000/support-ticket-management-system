@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: page(~{:: title}, ~{:: main})}">
+<head>
+  <title>Create ticket | STMS</title>
+</head>
+<body>
+<main>
+  <div class="mx-auto max-w-3xl">
+    <a class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 transition hover:text-indigo-700"
+       th:href="@{/tickets}" href="/tickets">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path fill-rule="evenodd" d="M11.78 14.78a.75.75 0 0 1-1.06 0l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 1 1 1.06 1.06L8.06 10l3.72 3.72a.75.75 0 0 1 0 1.06Z" clip-rule="evenodd"/>
+      </svg>
+      Back to tickets
+    </a>
+    <div class="mt-6">
+      <p class="text-sm font-semibold uppercase tracking-wider text-indigo-600">New request</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">Create ticket</h1>
+      <p class="mt-2 text-sm text-slate-600">Describe the support request and route it to the right priority.</p>
+    </div>
+
+    <form class="mt-8 space-y-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+          method="post"
+          th:action="@{/tickets}"
+          th:object="${ticketCreateForm}">
+      <div th:if="${#fields.hasAnyErrors()}"
+           class="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700"
+           role="alert">
+        <svg class="mt-0.5 h-5 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 1.75a8.25 8.25 0 1 0 0 16.5 8.25 8.25 0 0 0 0-16.5ZM9.25 6.5a.75.75 0 0 1 1.5 0v4a.75.75 0 0 1-1.5 0v-4ZM10 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clip-rule="evenodd"/>
+        </svg>
+        <span>Please correct the highlighted fields.</span>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-slate-700" for="title">Title</label>
+        <p class="mt-1 text-xs text-slate-500">Use a short summary that clearly describes the issue.</p>
+        <input class="mt-2 block w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+               th:classappend="${#fields.hasErrors('title')} ? 'border-red-400 ring-2 ring-red-100' : 'border-slate-300'"
+               id="title" type="text" maxlength="200" autocomplete="off"
+               placeholder="For example: Unable to access billing portal"
+               th:field="*{title}" aria-describedby="title-error">
+        <p class="mt-1.5 inline-flex rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-600"
+           id="title-error"
+           th:if="${#fields.hasErrors('title')}"
+           th:errors="*{title}">Title validation error</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-semibold text-slate-700" for="description">Description</label>
+        <p class="mt-1 text-xs text-slate-500">Include context, impact, and any troubleshooting already attempted.</p>
+        <textarea class="mt-2 block min-h-40 w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  th:classappend="${#fields.hasErrors('description')} ? 'border-red-400 ring-2 ring-red-100' : 'border-slate-300'"
+                  id="description" maxlength="8000"
+                  placeholder="Provide the details needed to investigate this request..."
+                  th:field="*{description}" aria-describedby="description-error"></textarea>
+        <p class="mt-1.5 inline-flex rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-600"
+           id="description-error"
+           th:if="${#fields.hasErrors('description')}"
+           th:errors="*{description}">Description validation error</p>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div>
+          <label class="block text-sm font-semibold text-slate-700" for="priority">Priority</label>
+          <select class="mt-2 block w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  th:classappend="${#fields.hasErrors('priority')} ? 'border-red-400 ring-2 ring-red-100' : 'border-slate-300'"
+                  id="priority" th:field="*{priority}" aria-describedby="priority-error">
+            <option value="">Select priority</option>
+            <option th:each="priorityOption : ${priorities}"
+                    th:value="${priorityOption}"
+                    th:text="${priorityOption}">MEDIUM</option>
+          </select>
+          <p class="mt-1.5 inline-flex rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-600"
+             id="priority-error"
+             th:if="${#fields.hasErrors('priority')}"
+             th:errors="*{priority}">Priority validation error</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-slate-700" for="assigneeId">
+            Assignee ID <span class="font-normal text-slate-500">(optional)</span>
+          </label>
+          <input class="mt-2 block w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                 th:classappend="${#fields.hasErrors('assigneeId')} ? 'border-red-400 ring-2 ring-red-100' : 'border-slate-300'"
+                 id="assigneeId" type="number" min="1" step="1"
+                 placeholder="User ID"
+                 th:field="*{assigneeId}" aria-describedby="assignee-error">
+          <p class="mt-1.5 inline-flex rounded-md bg-red-50 px-2 py-1 text-sm font-medium text-red-600"
+             id="assignee-error"
+             th:if="${#fields.hasErrors('assigneeId')}"
+             th:errors="*{assigneeId}">Assignee validation error</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 border-t border-slate-200 pt-6">
+        <a class="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+           th:href="@{/tickets}" href="/tickets">Cancel</a>
+        <button class="rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                type="submit">Create ticket</button>
+      </div>
+    </form>
+  </div>
+</main>
+</body>
+</html>

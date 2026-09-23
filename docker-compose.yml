@@ -1,0 +1,19 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: stms
+      POSTGRES_USER: stms
+      POSTGRES_PASSWORD: stms
+    volumes:
+      - stms_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stms -d stms"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  stms_pgdata:

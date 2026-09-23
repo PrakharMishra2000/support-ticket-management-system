@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: page(~{:: title}, ~{:: main})}">
+<head>
+  <title>Tickets | STMS</title>
+</head>
+<body>
+<main>
+  <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-wider text-indigo-600">Workspace</p>
+      <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">Support tickets</h1>
+      <p class="mt-2 text-sm text-slate-600">Search, filter, and manage every support request.</p>
+    </div>
+    <a class="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:-translate-y-0.5 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+       th:href="@{/tickets/new}" href="/tickets/new">
+      <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M10 3.75a.75.75 0 0 1 .75.75v4.75h4.75a.75.75 0 0 1 0 1.5h-4.75v4.75a.75.75 0 0 1-1.5 0v-4.75H4.5a.75.75 0 0 1 0-1.5h4.75V4.5a.75.75 0 0 1 .75-.75Z"/>
+      </svg>
+      Create ticket
+    </a>
+  </div>
+
+  <form class="mt-8 grid gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm md:grid-cols-4"
+        method="get" th:action="@{/tickets}" action="/tickets" role="search">
+    <div class="md:col-span-2">
+      <label class="block text-sm font-semibold text-slate-700" for="q">Search tickets</label>
+      <div class="relative mt-1.5">
+        <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+                d="M9 3.5a5.5 5.5 0 1 0 3.474 9.765l3.63 3.63a.75.75 0 0 0 1.061-1.06l-3.63-3.63A5.5 5.5 0 0 0 9 3.5ZM5 9a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z"
+                clip-rule="evenodd"/>
+        </svg>
+        <input class="block w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+               id="q" name="q" type="search" maxlength="200"
+               placeholder="Search title or description"
+               th:value="${query}" value="">
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-semibold text-slate-700" for="status">Status</label>
+      <div class="relative mt-1.5">
+        <svg class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd"
+                d="M2.75 4A.75.75 0 0 1 3.5 3.25h13a.75.75 0 0 1 .53 1.28L12 9.56v4.69a.75.75 0 0 1-.416.67l-3 1.5A.75.75 0 0 1 7.5 15.75V9.56L2.97 4.53A.75.75 0 0 1 2.75 4Z"
+                clip-rule="evenodd"/>
+        </svg>
+        <select class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-10 pr-8 text-sm text-slate-900 shadow-sm transition focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                id="status" name="status">
+          <option value="">All statuses</option>
+          <option th:each="ticketStatus : ${statuses}"
+                  th:value="${ticketStatus}"
+                  th:text="${#strings.replace(ticketStatus.name(), '_', ' ')}"
+                  th:selected="${ticketStatus == selectedStatus}">
+            OPEN
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="flex items-end gap-2">
+      <button class="rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              type="submit">Apply filters</button>
+      <a class="rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+         th:href="@{/tickets}" href="/tickets">Clear</a>
+    </div>
+  </form>
+
+  <section id="ticket-list" class="mt-6 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm"
+           aria-live="polite" aria-labelledby="ticket-results-heading">
+    <div class="flex items-center justify-between border-b border-slate-200 px-5 py-4 sm:px-6">
+      <div>
+        <h2 class="font-semibold text-slate-900" id="ticket-results-heading">Ticket results</h2>
+        <p class="mt-0.5 text-sm text-slate-500"
+         th:text="|${totalTickets} ticket${totalTickets == 1 ? '' : 's'} found|">0 tickets found</p>
+      </div>
+      <span class="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">Live queue</span>
+    </div>
+
+    <div class="p-8 text-center" th:if="${#lists.isEmpty(tickets)}">
+      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+        <svg class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path d="M4.5 3A2.5 2.5 0 0 0 2 5.5v7A2.5 2.5 0 0 0 4.5 15H6l2.8 2.1a2 2 0 0 0 2.4 0L14 15h1.5a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 15.5 3h-11Z"/>
+        </svg>
+      </div>
+      <h3 class="mt-4 font-semibold text-slate-900">No tickets found</h3>
+      <p class="mt-1 text-sm text-slate-600">Try changing the keyword or status filter.</p>
+    </div>
+
+    <div class="hidden overflow-x-auto md:block" th:unless="${#lists.isEmpty(tickets)}">
+      <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50/80">
+        <tr>
+          <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">ID</th>
+          <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Title</th>
+          <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Status</th>
+          <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Priority</th>
+          <th class="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Assignee</th>
+        </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+        <tr class="transition hover:bg-indigo-50/40" th:each="ticket : ${tickets}">
+          <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-500"
+              th:text="|#${ticket.id()}|">#1</td>
+          <td class="px-6 py-4">
+            <a class="font-semibold text-slate-900 transition hover:text-indigo-700"
+               th:href="@{/tickets/{id}(id=${ticket.id()})}"
+               th:text="${ticket.title()}">Ticket title</a>
+          </td>
+          <td class="whitespace-nowrap px-6 py-4">
+            <th:block th:replace="~{fragments/status :: badge(${ticket.status()})}"></th:block>
+          </td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm font-semibold text-slate-700"
+              th:text="${ticket.priority()}">MEDIUM</td>
+          <td class="whitespace-nowrap px-6 py-4 text-sm text-slate-600"
+              th:text="${ticket.assigneeId() == null ? 'Unassigned' : 'User ' + ticket.assigneeId()}">
+            Unassigned
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="divide-y divide-slate-200 md:hidden" th:unless="${#lists.isEmpty(tickets)}">
+      <article class="p-5 transition hover:bg-slate-50" th:each="ticket : ${tickets}">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-xs font-medium text-slate-500" th:text="|Ticket #${ticket.id()}|">Ticket #1</p>
+            <a class="mt-1 block font-semibold text-slate-900 hover:text-indigo-700"
+               th:href="@{/tickets/{id}(id=${ticket.id()})}"
+               th:text="${ticket.title()}">Ticket title</a>
+          </div>
+          <th:block th:replace="~{fragments/status :: badge(${ticket.status()})}"></th:block>
+        </div>
+        <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+          <div>
+            <dt class="text-slate-500">Priority</dt>
+            <dd class="font-semibold text-slate-800" th:text="${ticket.priority()}">MEDIUM</dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Assignee</dt>
+            <dd class="font-semibold text-slate-800"
+                th:text="${ticket.assigneeId() == null ? 'Unassigned' : 'User ' + ticket.assigneeId()}">
+              Unassigned
+            </dd>
+          </div>
+        </dl>
+      </article>
+    </div>
+  </section>
+</main>
+</body>
+</html>

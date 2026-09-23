@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="page(pageTitle, pageContent)">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Support Ticket Management System">
+  <title th:replace="${pageTitle}">STMS</title>
+  <!-- Pinned Tailwind Play CDN build; replace with a compiled stylesheet before production. -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" th:href="@{/css/app.css}" href="/css/app.css">
+  <script defer th:src="@{/js/app.js}" src="/js/app.js"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+  <header th:fragment="navigation"
+          class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+         aria-label="Primary navigation">
+      <a class="group flex items-center gap-3" th:href="@{/tickets}" href="/tickets">
+        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-sm shadow-indigo-200 transition group-hover:bg-indigo-700">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M9 12h6m-6 4h3m5 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z"/>
+          </svg>
+        </span>
+        <span>
+          <span class="block text-sm font-bold tracking-tight text-slate-900">STMS</span>
+          <span class="hidden text-xs text-slate-500 sm:block">Support operations</span>
+        </span>
+      </a>
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-indigo-700"
+           th:href="@{/tickets}" href="/tickets">Tickets</a>
+        <a class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+           th:href="@{/tickets/new}" href="/tickets/new">
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M10 3.75a.75.75 0 0 1 .75.75v4.75h4.75a.75.75 0 0 1 0 1.5h-4.75v4.75a.75.75 0 0 1-1.5 0v-4.75H4.5a.75.75 0 0 1 0-1.5h4.75V4.5a.75.75 0 0 1 .75-.75Z"/>
+          </svg>
+          <span>New ticket</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10"
+        th:replace="${pageContent}">
+    <p>Page content</p>
+  </main>
+</body>
+</html>

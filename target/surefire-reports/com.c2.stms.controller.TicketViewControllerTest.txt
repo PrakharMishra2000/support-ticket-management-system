@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.c2.stms.controller.TicketViewControllerTest
+-------------------------------------------------------------------------------
+Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.822 s -- in com.c2.stms.controller.TicketViewControllerTest

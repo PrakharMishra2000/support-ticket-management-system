@@ -1,0 +1,11 @@
+com/c2/stms/service/ActorContextTest.class
+com/c2/stms/StmsApplicationTests.class
+com/c2/stms/infrastructure/TicketRepositoryIT.class
+com/c2/stms/config/CorsConfigTest.class
+com/c2/stms/domain/TicketStateMachineTest.class
+com/c2/stms/H2ApplicationTest.class
+com/c2/stms/domain/TicketStatusTest.class
+com/c2/stms/service/CommentServiceTest.class
+com/c2/stms/infrastructure/TicketRepositorySearchIT.class
+com/c2/stms/service/TicketServiceTest.class
+com/c2/stms/domain/TicketStatusTest$1.class

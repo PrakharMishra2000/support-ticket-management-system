@@ -1,0 +1,14 @@
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/H2ApplicationTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/StmsApplicationTests.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/config/CorsConfigTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/controller/CommentControllerTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/controller/TicketControllerTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/controller/TicketViewControllerTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/domain/TicketStateMachineTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/domain/TicketStatusTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/infrastructure/TicketRepositoryIT.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/infrastructure/TicketRepositorySearchIT.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/service/ActorContextTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/service/CommentServiceTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/service/TicketServiceIntegrationTest.java
+/home/prakhar-mishra/stms/src/test/java/com/c2/stms/service/TicketServiceTest.java
